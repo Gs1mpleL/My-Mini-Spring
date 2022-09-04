@@ -5,3 +5,6 @@
   - getBean()直接获取Bean
   - 不存在bean，getBeanDefinition（）获取Bean的定义
   - createBean（）根据Bean的定义创建出实例并返回
+
+# 为Bean注入属性
+- 属性List在BeanDefinition中，通过BeanDefinition创建Bean时，为Bean设置属性再返回Bean
