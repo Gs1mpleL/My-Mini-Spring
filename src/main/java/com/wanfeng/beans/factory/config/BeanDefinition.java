@@ -1,7 +1,6 @@
 package com.wanfeng.beans.factory.config;
 
-import com.wanfeng.beans.factory.PropertyValues;
-import lombok.AllArgsConstructor;
+import com.wanfeng.beans.PropertyValues;
 import lombok.Data;
 
 /**

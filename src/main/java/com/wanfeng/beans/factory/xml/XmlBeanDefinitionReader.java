@@ -3,7 +3,7 @@ package com.wanfeng.beans.factory.xml;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.core.util.XmlUtil;
 import com.wanfeng.beans.BeansException;
-import com.wanfeng.beans.factory.PropertyValue;
+import com.wanfeng.beans.PropertyValue;
 import com.wanfeng.beans.factory.config.BeanDefinition;
 import com.wanfeng.beans.factory.config.BeanReference;
 import com.wanfeng.beans.factory.support.AbstractBeanDefinitionReader;

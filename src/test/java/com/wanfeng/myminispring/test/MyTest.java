@@ -1,15 +1,18 @@
 package com.wanfeng.myminispring.test;
 
 import cn.hutool.core.io.IoUtil;
-import com.wanfeng.beans.factory.PropertyValue;
-import com.wanfeng.beans.factory.PropertyValues;
+import com.wanfeng.beans.PropertyValue;
+import com.wanfeng.beans.PropertyValues;
 import com.wanfeng.beans.factory.config.BeanDefinition;
 import com.wanfeng.beans.factory.config.BeanReference;
 import com.wanfeng.beans.factory.support.DefaultListableBeanFactory;
+import com.wanfeng.beans.factory.xml.XmlBeanDefinitionReader;
 import com.wanfeng.core.io.DefaultResourceLoader;
 import com.wanfeng.core.io.Resource;
 import com.wanfeng.myminispring.Bean.Car;
 import com.wanfeng.myminispring.Bean.Person;
+import com.wanfeng.myminispring.BeanProcessor.MyBeanFactoryPostProcessor;
+import com.wanfeng.myminispring.BeanProcessor.MyBeanPostProcessor;
 import com.wanfeng.myminispring.service.HelloService;
 import org.junit.Test;
 
@@ -76,5 +79,21 @@ public class MyTest {
         resource = resourceLoader.getResource("https://www.baidu.com");
         System.out.println(IoUtil.readUtf8(resource.getInputStream()));
     }
+
+    @Test
+    public void BeanFactoryPostProcessor(){
+        DefaultListableBeanFactory beanFactory = new DefaultListableBeanFactory();
+        XmlBeanDefinitionReader beanDefinitionReader = new XmlBeanDefinitionReader(beanFactory);
+        beanDefinitionReader.loadBeanDefinitions("classpath:spring.xml");
+        // 此时BeanDefinition都加载完成了
+        // 在Bean实例化之前可以更改BeanDefinitions的属性
+        MyBeanFactoryPostProcessor myBeanFactoryPostProcessor = new MyBeanFactoryPostProcessor();
+        myBeanFactoryPostProcessor.postProcessBeanFactory(beanFactory);
+        // BeanPostProcessor在实例化时起作用
+        beanFactory.addBeanPostProcessor(new MyBeanPostProcessor());
+        System.out.println(beanFactory.getBean("person"));
+    }
+
+
 }
 

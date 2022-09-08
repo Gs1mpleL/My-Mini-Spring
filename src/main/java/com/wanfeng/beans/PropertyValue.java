@@ -1,4 +1,4 @@
-package com.wanfeng.beans.factory;
+package com.wanfeng.beans;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

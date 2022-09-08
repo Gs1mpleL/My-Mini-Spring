@@ -11,3 +11,7 @@
 
 # 为Bean注入Bean
 - 注入属性时，value设置为BeanReference对象，对象包括Bean的name,遍历属性注入时，如果是BeanReference类，就通过BeanName获取对应的Bean进行注入
+
+# BeanFactoryPostProcessor和BeanPostProcessor
+- 第一个是在BeanDefinition注册完成后执行
+- 第二个有两个方法，分别在Bean构造前后执行
