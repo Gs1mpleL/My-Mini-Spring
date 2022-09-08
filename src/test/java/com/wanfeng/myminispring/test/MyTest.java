@@ -1,14 +1,15 @@
 package com.wanfeng.myminispring.test;
 
 import cn.hutool.core.io.IoUtil;
-import com.wanfeng.beans.PropertyValue;
-import com.wanfeng.beans.PropertyValues;
-import com.wanfeng.beans.factory.config.BeanDefinition;
-import com.wanfeng.beans.factory.config.BeanReference;
-import com.wanfeng.beans.factory.support.DefaultListableBeanFactory;
-import com.wanfeng.beans.factory.xml.XmlBeanDefinitionReader;
-import com.wanfeng.core.io.DefaultResourceLoader;
-import com.wanfeng.core.io.Resource;
+import com.wanfeng.miniSpring.beans.PropertyValue;
+import com.wanfeng.miniSpring.beans.PropertyValues;
+import com.wanfeng.miniSpring.beans.factory.config.BeanDefinition;
+import com.wanfeng.miniSpring.beans.factory.config.BeanReference;
+import com.wanfeng.miniSpring.beans.factory.support.DefaultListableBeanFactory;
+import com.wanfeng.miniSpring.beans.factory.xml.XmlBeanDefinitionReader;
+import com.wanfeng.miniSpring.context.support.ClassPathXmlApplicationContext;
+import com.wanfeng.miniSpring.core.io.DefaultResourceLoader;
+import com.wanfeng.miniSpring.core.io.Resource;
 import com.wanfeng.myminispring.Bean.Car;
 import com.wanfeng.myminispring.Bean.Person;
 import com.wanfeng.myminispring.BeanProcessor.MyBeanFactoryPostProcessor;
@@ -94,6 +95,12 @@ public class MyTest {
         System.out.println(beanFactory.getBean("person"));
     }
 
+    @Test
+    public void applicationContextTest(){
+        ClassPathXmlApplicationContext applicationContext = new ClassPathXmlApplicationContext("classpath:spring.xml");
+        Person person = applicationContext.getBean("person", Person.class);
+        System.out.println(person);
+    }
 
 }
 

@@ -15,3 +15,6 @@
 # BeanFactoryPostProcessor和BeanPostProcessor
 - 第一个是在BeanDefinition注册完成后执行
 - 第二个有两个方法，分别在Bean构造前后执行
+
+# ApplicationContext
+- postProcessor的注册自动完成，通过遍历IOC容器寻找，并提前进行实例化
