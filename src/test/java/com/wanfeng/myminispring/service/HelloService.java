@@ -1,4 +1,4 @@
-package com.wanfeng.service;
+package com.wanfeng.myminispring.service;
 
 public class HelloService {
     public void sayHello(){

@@ -1,18 +1,19 @@
-package com.wanfeng.test;
+package com.wanfeng.myminispring.test;
 
 import com.wanfeng.beans.factory.PropertyValue;
 import com.wanfeng.beans.factory.PropertyValues;
 import com.wanfeng.beans.factory.config.BeanDefinition;
 import com.wanfeng.beans.factory.config.BeanReference;
 import com.wanfeng.beans.factory.support.DefaultListableBeanFactory;
-import com.wanfeng.service.HelloService;
+import com.wanfeng.myminispring.Bean.Car;
+import com.wanfeng.myminispring.Bean.Person;
+import com.wanfeng.myminispring.service.HelloService;
+import org.junit.Test;
 
-public class Test {
-    public static void main(String[] args) {
-        createBeanWithPropAndReference();
-    }
+public class MyTest {
 
-    private static void createBeanTest() {
+    @Test
+    public void createBeanTest() {
         DefaultListableBeanFactory factory = new DefaultListableBeanFactory();
         BeanDefinition beanDefinition = new BeanDefinition(HelloService.class);
         factory.registerBeanDefinition("helloService",beanDefinition);
@@ -20,7 +21,8 @@ public class Test {
         helloService.sayHello();
     }
 
-    private static void createBeanWithProp(){
+    @Test
+    public void createBeanWithProp(){
         DefaultListableBeanFactory factory = new DefaultListableBeanFactory();
         BeanDefinition beanDefinition = new BeanDefinition(Person.class);
         PropertyValues propertyValues = new PropertyValues();
@@ -31,8 +33,8 @@ public class Test {
         Person person = (Person) factory.getBean("person");
         System.out.println(person);
     }
-
-    private static void createBeanWithPropAndReference(){
+    @Test
+    public void createBeanWithPropAndReference(){
         DefaultListableBeanFactory factory = new DefaultListableBeanFactory();
         // 注入Car
         BeanDefinition carDefinition = new BeanDefinition(Car.class);

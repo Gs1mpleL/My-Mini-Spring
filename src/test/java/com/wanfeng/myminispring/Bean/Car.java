@@ -1,4 +1,4 @@
-package com.wanfeng.test;
+package com.wanfeng.myminispring.Bean;
 
 import lombok.Data;
 
