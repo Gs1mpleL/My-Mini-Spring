@@ -1,14 +1,21 @@
 package com.wanfeng.myminispring.test;
 
+import cn.hutool.core.io.IoUtil;
 import com.wanfeng.beans.factory.PropertyValue;
 import com.wanfeng.beans.factory.PropertyValues;
 import com.wanfeng.beans.factory.config.BeanDefinition;
 import com.wanfeng.beans.factory.config.BeanReference;
 import com.wanfeng.beans.factory.support.DefaultListableBeanFactory;
+import com.wanfeng.core.io.DefaultResourceLoader;
+import com.wanfeng.core.io.Resource;
 import com.wanfeng.myminispring.Bean.Car;
 import com.wanfeng.myminispring.Bean.Person;
 import com.wanfeng.myminispring.service.HelloService;
 import org.junit.Test;
+
+import java.io.IOException;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class MyTest {
 
@@ -54,6 +61,20 @@ public class MyTest {
         factory.registerBeanDefinition("person",personDefinition);
         Person person = (Person) factory.getBean("person");
         System.out.println(person);
+    }
+
+    @Test
+    public void loadResource() throws IOException {
+        DefaultResourceLoader resourceLoader = new DefaultResourceLoader();
+        Resource resource = resourceLoader.getResource("classpath:hello.txt");
+        System.out.println(IoUtil.readUtf8(resource.getInputStream()));
+
+
+        resource = resourceLoader.getResource("/Users/liuzhuohao/Documents/javaProject/My-Mini-Spring/src/main/resources/hello.txt");
+        System.out.println(IoUtil.readUtf8(resource.getInputStream()));
+
+        resource = resourceLoader.getResource("https://www.baidu.com");
+        System.out.println(IoUtil.readUtf8(resource.getInputStream()));
     }
 }
 
