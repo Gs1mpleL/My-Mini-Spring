@@ -8,3 +8,6 @@
 
 # 为Bean注入属性
 - 属性List在BeanDefinition中，通过BeanDefinition创建Bean时，为Bean设置属性再返回Bean
+
+# 为Bean注入Bean
+- 注入属性时，value设置为BeanReference对象，对象包括Bean的name,遍历属性注入时，如果是BeanReference类，就通过BeanName获取对应的Bean进行注入

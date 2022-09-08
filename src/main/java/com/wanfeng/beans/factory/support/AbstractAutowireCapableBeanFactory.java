@@ -4,6 +4,7 @@ import cn.hutool.core.bean.BeanUtil;
 import com.wanfeng.beans.BeansException;
 import com.wanfeng.beans.factory.PropertyValue;
 import com.wanfeng.beans.factory.config.BeanDefinition;
+import com.wanfeng.beans.factory.config.BeanReference;
 
 public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFactory {
     /**
@@ -37,6 +38,11 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
             for (PropertyValue propertyValue : beanDefinition.getPropertyValues().getPropertyValues()) {
                 String name = propertyValue.getName();
                 Object value = propertyValue.getValue();
+                // 如果value是BeanReference,通过beanName去Ioc拿实例
+                if (value instanceof BeanReference){
+                    BeanReference beanReference = (BeanReference) value;
+                    value = getBean(beanReference.getBeanName());
+                }
                 //通过反射设置Bean的参数
                 BeanUtil.setFieldValue(bean, name, value);
             }
