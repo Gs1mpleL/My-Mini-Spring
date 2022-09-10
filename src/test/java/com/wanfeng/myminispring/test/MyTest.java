@@ -101,5 +101,12 @@ public class MyTest {
         System.out.println(person);
     }
 
+
+    @Test
+    public void initAndDestroyMethod() throws Exception {
+        ClassPathXmlApplicationContext applicationContext = new ClassPathXmlApplicationContext("classpath:spring.xml");
+        applicationContext.registerShutdownHook();  //或者手动关闭 applicationContext.close();
+    }
+
 }
 

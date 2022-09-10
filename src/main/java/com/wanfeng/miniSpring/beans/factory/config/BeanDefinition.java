@@ -18,7 +18,15 @@ public class BeanDefinition {
      */
     private PropertyValues propertyValues;
 
+    /**
+     * Bean的初始化方法
+     */
+    private String initMethodName;
 
+    /**
+     * Bean的销毁方法
+     */
+    private String destroyMethodName;
 
 
     public BeanDefinition(Class beanClass) {

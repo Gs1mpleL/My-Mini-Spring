@@ -1,6 +1,7 @@
 package com.wanfeng.miniSpring.beans.factory.xml;
 
 import cn.hutool.core.util.StrUtil;
+
 import cn.hutool.core.util.XmlUtil;
 import com.wanfeng.miniSpring.beans.BeansException;
 import com.wanfeng.miniSpring.beans.PropertyValue;
@@ -17,7 +18,14 @@ import org.w3c.dom.NodeList;
 import java.io.IOException;
 import java.io.InputStream;
 
+/**
+ * 读取配置在xml文件中的bean定义信息
+ *
+ * @author derekyi
+ * @date 2020/11/26
+ */
 public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
+
     public static final String BEAN_ELEMENT = "bean";
     public static final String PROPERTY_ELEMENT = "property";
     public static final String ID_ATTRIBUTE = "id";
@@ -25,6 +33,9 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
     public static final String CLASS_ATTRIBUTE = "class";
     public static final String VALUE_ATTRIBUTE = "value";
     public static final String REF_ATTRIBUTE = "ref";
+    public static final String INIT_METHOD_ATTRIBUTE = "init-method";
+    public static final String DESTROY_METHOD_ATTRIBUTE = "destroy-method";
+
     public XmlBeanDefinitionReader(BeanDefinitionRegistry registry) {
         super(registry);
     }
@@ -32,9 +43,10 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
     public XmlBeanDefinitionReader(BeanDefinitionRegistry registry, ResourceLoader resourceLoader) {
         super(registry, resourceLoader);
     }
+
     @Override
     public void loadBeanDefinitions(String location) throws BeansException {
-        ResourceLoader resourceLoader = super.getResourceLoader();
+        ResourceLoader resourceLoader = getResourceLoader();
         Resource resource = resourceLoader.getResource(location);
         loadBeanDefinitions(resource);
     }
@@ -53,10 +65,6 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
         }
     }
 
-    /**
-     * 解析XML文件
-     * @param inputStream
-     */
     protected void doLoadBeanDefinitions(InputStream inputStream) {
         Document document = XmlUtil.readXML(inputStream);
         Element root = document.getDocumentElement();
@@ -69,6 +77,8 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
                     String id = bean.getAttribute(ID_ATTRIBUTE);
                     String name = bean.getAttribute(NAME_ATTRIBUTE);
                     String className = bean.getAttribute(CLASS_ATTRIBUTE);
+                    String initMethodName = bean.getAttribute(INIT_METHOD_ATTRIBUTE);
+                    String destroyMethodName = bean.getAttribute(DESTROY_METHOD_ATTRIBUTE);
 
                     Class<?> clazz = null;
                     try {
@@ -84,6 +94,8 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
                     }
 
                     BeanDefinition beanDefinition = new BeanDefinition(clazz);
+                    beanDefinition.setInitMethodName(initMethodName);
+                    beanDefinition.setDestroyMethodName(destroyMethodName);
 
                     for (int j = 0; j < bean.getChildNodes().getLength(); j++) {
                         if (bean.getChildNodes().item(j) instanceof Element) {

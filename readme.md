@@ -28,3 +28,9 @@ XML -> BeanDefinition -> BeanDefinition被BeanFactoryPostProcessor
 # 学习心得
 总体逻辑不复杂
 但是Spring作为一个基础框架，使用大量继承，相当于地基比较大，可以承载更多东西，这部分设计比较复杂
+
+# Bean的初始化和销毁
+- 目前实现两种方法，一种是指定Bean的初始化和销毁方法名称，另一个种是实现两个接口
+- 在BeanDefinition中添加String表示的初始化方法名称和销毁名称
+- 在Bean实例话时，判断BeanDefinition中初始化方法字符串是否存在，存在就通过反射调用对应的方法
+- 销毁方法注册在一个Map中，消费时直接拿出来进行执行

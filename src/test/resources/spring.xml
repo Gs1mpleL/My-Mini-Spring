@@ -1,17 +1,32 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<beans >
+<!--<?xml version="1.0" encoding="UTF-8"?>-->
+<!--<beans >-->
 
-    <bean id="person" class="com.wanfeng.myminispring.Bean.Person">
-        <property name="name" value="derek"/>
-        <property name="age" value="12" />
-        <property name="car" ref="car"/>
-    </bean>
+<!--    <bean id="person" class="com.wanfeng.myminispring.Bean.Person">-->
+<!--        <property name="name" value="derek"/>-->
+<!--        <property name="age" value="12" />-->
+<!--        <property name="car" ref="car"/>-->
+<!--    </bean>-->
 
-    <bean id="car" class="com.wanfeng.myminispring.Bean.Car">
-        <property name="carName" value="maShaLa"/>
-    </bean>
+<!--    <bean id="car" class="com.wanfeng.myminispring.Bean.Car">-->
+<!--        <property name="carName" value="maShaLa"/>-->
+<!--    </bean>-->
 
-    <bean class="com.wanfeng.myminispring.BeanProcessor.MyBeanFactoryPostProcessor"/>
-    <bean class="com.wanfeng.myminispring.BeanProcessor.MyBeanPostProcessor"/>
+<!--    <bean class="com.wanfeng.myminispring.BeanProcessor.MyBeanFactoryPostProcessor"/>-->
+<!--    <bean class="com.wanfeng.myminispring.BeanProcessor.MyBeanPostProcessor"/>-->
+
+<!--</beans>-->
+
+
+<!--        <?xml version="1.0" encoding="UTF-8"?>-->
+<beans>
+
+<bean id="person" class="com.wanfeng.myminispring.Bean.Person" >
+    <property name="name" value="derek"/>
+    <property name="car" ref="car"/>
+</bean>
+
+<bean id="car" class="com.wanfeng.myminispring.Bean.Car">
+    <property name="carName" value="porsche"/>
+</bean>
 
 </beans>
