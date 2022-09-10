@@ -23,3 +23,8 @@
 XML -> BeanDefinition -> BeanDefinition被BeanFactoryPostProcessor
 -> BeanPostProcessor前置处理 -> Bean的初始化 -> BeanPostProcessor后置处理
 -> 使用
+
+
+# 学习心得
+总体逻辑不复杂
+但是Spring作为一个基础框架，使用大量继承，相当于地基比较大，可以承载更多东西，这部分设计比较复杂
