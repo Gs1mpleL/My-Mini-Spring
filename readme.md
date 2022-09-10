@@ -18,3 +18,8 @@
 
 # ApplicationContext
 - postProcessor的注册自动完成，通过遍历IOC容器寻找，并提前进行实例化
+
+# 到现在 Bean的生命周期是
+XML -> BeanDefinition -> BeanDefinition被BeanFactoryPostProcessor
+-> BeanPostProcessor前置处理 -> Bean的初始化 -> BeanPostProcessor后置处理
+-> 使用
