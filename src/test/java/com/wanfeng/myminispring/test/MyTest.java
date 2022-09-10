@@ -2,9 +2,11 @@ package com.wanfeng.myminispring.test;
 
 import cn.hutool.core.io.IoUtil;
 import com.wanfeng.myminiSpring.aop.AdvisedSupport;
+import com.wanfeng.myminiSpring.aop.ClassFilter;
 import com.wanfeng.myminiSpring.aop.MethodMatcher;
 import com.wanfeng.myminiSpring.aop.TargetSource;
 import com.wanfeng.myminiSpring.aop.aspectJ.AspectJExpressionPointcut;
+import com.wanfeng.myminiSpring.aop.aspectJ.AspectJExpressionPointcutAdvisor;
 import com.wanfeng.myminiSpring.aop.framework.CglibAopProxy;
 import com.wanfeng.myminiSpring.aop.framework.JdkDynamicAopProxy;
 import com.wanfeng.myminiSpring.aop.framework.ProxyFactory;
@@ -26,6 +28,7 @@ import com.wanfeng.myminispring.service.HelloService;
 import com.wanfeng.myminispring.service.HelloServiceBeforeAdvice;
 import com.wanfeng.myminispring.service.HelloServiceInterceptor;
 import com.wanfeng.myminispring.service.IService;
+import org.aopalliance.intercept.MethodInterceptor;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -213,6 +216,30 @@ public class MyTest {
         advisedSupport.setMethodMatcher(methodMatcher);
         ProxyFactory proxyFactory = new ProxyFactory(advisedSupport);
         ((IService) proxyFactory.getProxy()).sayHello();
+    }
+
+    @Test
+    public void advisorTest(){
+        HelloService helloService = new HelloService();
+        AspectJExpressionPointcutAdvisor advisor = new AspectJExpressionPointcutAdvisor();
+        MethodBeforeAdviceInterceptor methodInterceptor = new MethodBeforeAdviceInterceptor(new HelloServiceBeforeAdvice());
+        // 设置表达式
+        advisor.setExpression("execution(* com.wanfeng.myminispring.service.HelloService.*(..))");
+        // 设置处理器
+        advisor.setAdvice(methodInterceptor);
+        ClassFilter classFilter = advisor.getPointcut().getClassFilter();
+        if (classFilter.matches(helloService.getClass())) {
+            AdvisedSupport advisedSupport = new AdvisedSupport();
+
+            TargetSource targetSource = new TargetSource(helloService);
+            advisedSupport.setTargetSource(targetSource);
+            advisedSupport.setMethodInterceptor((MethodInterceptor) advisor.getAdvice());
+            advisedSupport.setMethodMatcher(advisor.getPointcut().getMethodMatcher());
+//			advisedSupport.setProxyTargetClass(true);   //JDK or CGLIB
+
+            IService proxy = (IService) new ProxyFactory(advisedSupport).getProxy();
+            proxy.sayHello();
+        }
     }
 }
 
