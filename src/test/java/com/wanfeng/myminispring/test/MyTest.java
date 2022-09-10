@@ -1,7 +1,14 @@
 package com.wanfeng.myminispring.test;
 
 import cn.hutool.core.io.IoUtil;
+import com.wanfeng.myminiSpring.aop.AdvisedSupport;
+import com.wanfeng.myminiSpring.aop.MethodMatcher;
+import com.wanfeng.myminiSpring.aop.TargetSource;
 import com.wanfeng.myminiSpring.aop.aspectJ.AspectJExpressionPointcut;
+import com.wanfeng.myminiSpring.aop.framework.CglibAopProxy;
+import com.wanfeng.myminiSpring.aop.framework.JdkDynamicAopProxy;
+import com.wanfeng.myminiSpring.aop.framework.ProxyFactory;
+import com.wanfeng.myminiSpring.aop.framework.adapter.MethodBeforeAdviceInterceptor;
 import com.wanfeng.myminiSpring.beans.PropertyValue;
 import com.wanfeng.myminiSpring.beans.PropertyValues;
 import com.wanfeng.myminiSpring.beans.factory.config.BeanDefinition;
@@ -16,6 +23,9 @@ import com.wanfeng.myminispring.Bean.Person;
 import com.wanfeng.myminispring.BeanProcessor.MyBeanFactoryPostProcessor;
 import com.wanfeng.myminispring.BeanProcessor.MyBeanPostProcessor;
 import com.wanfeng.myminispring.service.HelloService;
+import com.wanfeng.myminispring.service.HelloServiceBeforeAdvice;
+import com.wanfeng.myminispring.service.HelloServiceInterceptor;
+import com.wanfeng.myminispring.service.IService;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -143,6 +153,66 @@ public class MyTest {
         // 判断切面表达式是否成立
         System.out.println(pointcut.matches(clazz));
         System.out.println(pointcut.matches(method, clazz));
+    }
+
+    @Test
+    public void jdkProxyTest(){
+        IService service = new HelloService();
+        AdvisedSupport advisedSupport = new AdvisedSupport();
+        // 代理对象
+        TargetSource targetSource = new TargetSource(service);
+        // 方法拦截器
+        HelloServiceInterceptor methodInterceptor = new HelloServiceInterceptor();
+
+        AspectJExpressionPointcut pointcut = new AspectJExpressionPointcut("execution(* com.wanfeng.myminispring.service.HelloService.*(..))");
+        // 方法匹配器
+        MethodMatcher methodMatcher = pointcut.getMethodMatcher();
+
+        advisedSupport.setTargetSource(targetSource);
+        advisedSupport.setMethodInterceptor(methodInterceptor);
+        advisedSupport.setMethodMatcher(methodMatcher);
+
+        IService proxy = (IService) new JdkDynamicAopProxy(advisedSupport).getProxy();
+        proxy.sayHello();
+    }
+
+    @Test
+    public void testCglibDynamicProxy() throws Exception {
+        HelloService service = new HelloService();
+        AdvisedSupport advisedSupport = new AdvisedSupport();
+        // 代理对象
+        TargetSource targetSource = new TargetSource(service);
+        // 方法拦截器
+        HelloServiceInterceptor methodInterceptor = new HelloServiceInterceptor();
+
+        AspectJExpressionPointcut pointcut = new AspectJExpressionPointcut("execution(* com.wanfeng.myminispring.service.HelloService.*(..))");
+        // 方法匹配器
+        MethodMatcher methodMatcher = pointcut.getMethodMatcher();
+
+        advisedSupport.setTargetSource(targetSource);
+        advisedSupport.setMethodInterceptor(methodInterceptor);
+        advisedSupport.setMethodMatcher(methodMatcher);
+        HelloService proxy = (HelloService) new CglibAopProxy(advisedSupport).getProxy();
+        proxy.sayHello();
+    }
+    @Test
+    public void testBeforeAdvice(){
+        HelloServiceBeforeAdvice helloServiceBeforeAdvice = new HelloServiceBeforeAdvice();
+        MethodBeforeAdviceInterceptor methodBeforeAdviceInterceptor = new MethodBeforeAdviceInterceptor(helloServiceBeforeAdvice);
+        HelloService service = new HelloService();
+        AdvisedSupport advisedSupport = new AdvisedSupport();
+        // 代理对象
+        TargetSource targetSource = new TargetSource(service);
+
+        AspectJExpressionPointcut pointcut = new AspectJExpressionPointcut("execution(* com.wanfeng.myminispring.service.HelloService.*(..))");
+        // 方法匹配器
+        MethodMatcher methodMatcher = pointcut.getMethodMatcher();
+
+        advisedSupport.setTargetSource(targetSource);
+        advisedSupport.setMethodInterceptor(methodBeforeAdviceInterceptor);
+        advisedSupport.setMethodMatcher(methodMatcher);
+        ProxyFactory proxyFactory = new ProxyFactory(advisedSupport);
+        ((IService) proxyFactory.getProxy()).sayHello();
     }
 }
 
