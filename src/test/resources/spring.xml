@@ -28,5 +28,7 @@
 <bean id="car" class="com.wanfeng.myminispring.Bean.Car" scope="prototype">
     <property name="carName" value="porsche" />
 </bean>
-
+<bean id="carFactory" class="com.wanfeng.myminispring.Bean.CarFactoryBean">
+    <property name="carName" value="porsche"/>
+</bean>
 </beans>

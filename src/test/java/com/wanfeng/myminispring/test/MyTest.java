@@ -122,5 +122,12 @@ public class MyTest {
         Object car1 = applicationContext.getBean("car");
         System.out.println(car1 == car);
     }
+
+    @Test
+    public void factoryBean(){
+        ClassPathXmlApplicationContext applicationContext = new ClassPathXmlApplicationContext("classpath:spring.xml");
+        Car carFactory = (Car) applicationContext.getBean("carFactory");
+        System.out.println(carFactory);
+    }
 }
 

@@ -44,3 +44,6 @@ XML -> BeanDefinition -> BeanDefinition被BeanFactoryPostProcessor
 # prototypeBean
 在BeanDefinition添加属性表示是否为prototypeBean
 实例化时如果不是单例Bean，就不注入Ioc容器，这样下次就会重新创建新的实例
+
+# FactoryBean
+实现该接口，实现getObject()方法，来返回实例对象，当注入该工厂时，获取对象时直接返回getObject的结果
