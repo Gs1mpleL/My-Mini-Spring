@@ -34,3 +34,9 @@ XML -> BeanDefinition -> BeanDefinition被BeanFactoryPostProcessor
 - 在BeanDefinition中添加String表示的初始化方法名称和销毁名称
 - 在Bean实例话时，判断BeanDefinition中初始化方法字符串是否存在，存在就通过反射调用对应的方法
 - 销毁方法注册在一个Map中，消费时直接拿出来进行执行
+
+# Aware接口
+解决了疑惑：为什么实现这个接口在方法中参数拿出来就是需要的ApplicationContext
+- BeanFactoryAware：Bean初始化时会检查是否实现这个接口，如果实现，直接调用接口方法，参数就是this
+这样就获得了这个BeanFactory
+- ApplicationContextAware：手动实现一个BeanPostProcessor(在Bean构造前检查上条)，手动注册，在实例话时按照BeanPostProcessor自动执行

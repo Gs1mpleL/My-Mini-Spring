@@ -5,6 +5,7 @@ import cn.hutool.core.util.ClassUtil;
 import cn.hutool.core.util.StrUtil;
 import com.wanfeng.miniSpring.beans.BeansException;
 import com.wanfeng.miniSpring.beans.PropertyValue;
+import com.wanfeng.miniSpring.beans.factory.BeanFactoryAware;
 import com.wanfeng.miniSpring.beans.factory.DisposableBean;
 import com.wanfeng.miniSpring.beans.factory.InitializingBean;
 import com.wanfeng.miniSpring.beans.factory.config.AutowireCapableBeanFactory;
@@ -24,9 +25,6 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
     protected Object createBean(String beanName, BeanDefinition beanDefinition) throws BeansException {
         return doCreateBean(beanName, beanDefinition);
     }
-
-
-
 
     /**
      * 实例化Bean并装入IOC
@@ -90,6 +88,13 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 
 
     protected Object initializeBean(String beanName, Object bean, BeanDefinition beanDefinition) {
+
+        // 实现BeanFactoryAware接口的Bean，
+        if (bean instanceof BeanFactoryAware) {
+            // 实现接口方法时，调用传入的参数就是对应的factory
+            ((BeanFactoryAware) bean).setBeanFactory(this);
+        }
+
         //执行BeanPostProcessor的前置处理
         Object wrappedBean = applyBeanPostProcessorsBeforeInitialization(bean, beanName);
 

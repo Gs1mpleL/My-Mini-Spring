@@ -108,5 +108,10 @@ public class MyTest {
         applicationContext.registerShutdownHook();  //或者手动关闭 applicationContext.close();
     }
 
+    @Test
+    public void testAwareInterface(){
+        ClassPathXmlApplicationContext applicationContext = new ClassPathXmlApplicationContext("classpath:spring.xml");
+        System.out.println("实际的ac"+applicationContext);
+    }
 }
 
