@@ -44,12 +44,18 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
         //注册有销毁方法的bean
         registerDisposableBeanIfNecessary(beanName, bean, beanDefinition);
 
-        addSingleton(beanName, bean);
+
+        // 只有单例Bean才注入Map，不是单例的Bean下次获取发现Map中不存在就会重新创建
+        if (beanDefinition.isSingleton()) {
+            addSingleton(beanName, bean);
+        }
         return bean;
     }
     protected void registerDisposableBeanIfNecessary(String beanName, Object bean, BeanDefinition beanDefinition) {
-        if (bean instanceof DisposableBean || StrUtil.isNotEmpty(beanDefinition.getDestroyMethodName())) {
-            registerDisposableBean(beanName, new DisposableBeanAdapter(bean, beanName, beanDefinition));
+        if (beanDefinition.isSingleton()) {
+            if (bean instanceof DisposableBean || StrUtil.isNotEmpty(beanDefinition.getDestroyMethodName())) {
+                registerDisposableBean(beanName, new DisposableBeanAdapter(bean, beanName, beanDefinition));
+            }
         }
     }
 
@@ -76,6 +82,7 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
      * 创建实例化对象
      */
     protected Object createBeanInstance(BeanDefinition beanDefinition) {
+        System.out.println("实例化BeanDefinition" + beanDefinition);
         return getInstantiationStrategy().instantiate(beanDefinition);
     }
 

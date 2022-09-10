@@ -2,12 +2,35 @@ package com.wanfeng.miniSpring.beans.factory.config;
 
 import com.wanfeng.miniSpring.beans.PropertyValues;
 import lombok.Data;
+import lombok.ToString;
 
 /**
  * Bean的定义，用于存储Bean的相关信息
  */
 @Data
+@ToString
 public class BeanDefinition {
+    public static String SCOPE_SINGLETON = "singleton";
+
+    public static String SCOPE_PROTOTYPE = "prototype";
+    private String scope = SCOPE_SINGLETON;
+
+    private boolean singleton = true;
+
+    private boolean prototype = false;
+    public void setScope(String scope) {
+        this.scope = scope;
+        this.singleton = SCOPE_SINGLETON.equals(scope);
+        this.prototype = SCOPE_PROTOTYPE.equals(scope);
+    }
+
+    public boolean isSingleton() {
+        return this.singleton;
+    }
+
+    public boolean isPrototype() {
+        return this.prototype;
+    }
     /**
      * Bean的Class类型
      */

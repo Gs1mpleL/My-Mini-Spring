@@ -40,3 +40,7 @@ XML -> BeanDefinition -> BeanDefinition被BeanFactoryPostProcessor
 - BeanFactoryAware：Bean初始化时会检查是否实现这个接口，如果实现，直接调用接口方法，参数就是this
 这样就获得了这个BeanFactory
 - ApplicationContextAware：手动实现一个BeanPostProcessor(在Bean构造前检查上条)，手动注册，在实例话时按照BeanPostProcessor自动执行
+
+# prototypeBean
+在BeanDefinition添加属性表示是否为prototypeBean
+实例化时如果不是单例Bean，就不注入Ioc容器，这样下次就会重新创建新的实例

@@ -113,5 +113,14 @@ public class MyTest {
         ClassPathXmlApplicationContext applicationContext = new ClassPathXmlApplicationContext("classpath:spring.xml");
         System.out.println("实际的ac"+applicationContext);
     }
+
+    @Test
+    public void testPrototypeBean(){
+        ClassPathXmlApplicationContext applicationContext = new ClassPathXmlApplicationContext("classpath:spring.xml");
+        Object car = applicationContext.getBean("car");
+
+        Object car1 = applicationContext.getBean("car");
+        System.out.println(car1 == car);
+    }
 }
 
