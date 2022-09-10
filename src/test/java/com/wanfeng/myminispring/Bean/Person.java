@@ -1,7 +1,7 @@
 package com.wanfeng.myminispring.Bean;
 
-import com.wanfeng.miniSpring.beans.factory.DisposableBean;
-import com.wanfeng.miniSpring.beans.factory.InitializingBean;
+import com.wanfeng.myminiSpring.beans.factory.DisposableBean;
+import com.wanfeng.myminiSpring.beans.factory.InitializingBean;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

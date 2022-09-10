@@ -1,15 +1,15 @@
 package com.wanfeng.myminispring.test;
 
 import cn.hutool.core.io.IoUtil;
-import com.wanfeng.miniSpring.beans.PropertyValue;
-import com.wanfeng.miniSpring.beans.PropertyValues;
-import com.wanfeng.miniSpring.beans.factory.config.BeanDefinition;
-import com.wanfeng.miniSpring.beans.factory.config.BeanReference;
-import com.wanfeng.miniSpring.beans.factory.support.DefaultListableBeanFactory;
-import com.wanfeng.miniSpring.beans.factory.xml.XmlBeanDefinitionReader;
-import com.wanfeng.miniSpring.context.support.ClassPathXmlApplicationContext;
-import com.wanfeng.miniSpring.core.io.DefaultResourceLoader;
-import com.wanfeng.miniSpring.core.io.Resource;
+import com.wanfeng.myminiSpring.beans.PropertyValue;
+import com.wanfeng.myminiSpring.beans.PropertyValues;
+import com.wanfeng.myminiSpring.beans.factory.config.BeanDefinition;
+import com.wanfeng.myminiSpring.beans.factory.config.BeanReference;
+import com.wanfeng.myminiSpring.beans.factory.support.DefaultListableBeanFactory;
+import com.wanfeng.myminiSpring.beans.factory.xml.XmlBeanDefinitionReader;
+import com.wanfeng.myminiSpring.context.support.ClassPathXmlApplicationContext;
+import com.wanfeng.myminiSpring.core.io.DefaultResourceLoader;
+import com.wanfeng.myminiSpring.core.io.Resource;
 import com.wanfeng.myminispring.Bean.Car;
 import com.wanfeng.myminispring.Bean.Person;
 import com.wanfeng.myminispring.BeanProcessor.MyBeanFactoryPostProcessor;

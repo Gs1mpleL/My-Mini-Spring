@@ -1,8 +1,8 @@
 package com.wanfeng.myminispring.Bean;
 
-import com.wanfeng.miniSpring.beans.BeansException;
-import com.wanfeng.miniSpring.context.ApplicationContext;
-import com.wanfeng.miniSpring.context.ApplicationContextAware;
+import com.wanfeng.myminiSpring.beans.BeansException;
+import com.wanfeng.myminiSpring.context.ApplicationContext;
+import com.wanfeng.myminiSpring.context.ApplicationContextAware;
 import lombok.Data;
 
 @Data
