@@ -47,3 +47,6 @@ XML -> BeanDefinition -> BeanDefinition被BeanFactoryPostProcessor
 
 # FactoryBean
 实现该接口，实现getObject()方法，来返回实例对象，当注入该工厂时，获取对象时直接返回getObject的结果
+
+# ApplicationContext的Event机制
+未完成，待后续补充
