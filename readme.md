@@ -50,3 +50,6 @@ XML -> BeanDefinition -> BeanDefinition被BeanFactoryPostProcessor
 
 # ApplicationContext的Event机制
 未完成，待后续补充
+
+# AOP
+封装比较深，使用AspectJ切面表达式进行匹配，通过配置进行选择是JDK代理还是CGLIB代理
