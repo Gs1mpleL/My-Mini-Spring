@@ -1,6 +1,7 @@
 package com.wanfeng.myminispring.test;
 
 import cn.hutool.core.io.IoUtil;
+import com.wanfeng.myminiSpring.aop.aspectJ.AspectJExpressionPointcut;
 import com.wanfeng.myminiSpring.beans.PropertyValue;
 import com.wanfeng.myminiSpring.beans.PropertyValues;
 import com.wanfeng.myminiSpring.beans.factory.config.BeanDefinition;
@@ -18,6 +19,9 @@ import com.wanfeng.myminispring.service.HelloService;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.lang.reflect.Method;
+
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 
 public class MyTest {
@@ -128,6 +132,17 @@ public class MyTest {
         ClassPathXmlApplicationContext applicationContext = new ClassPathXmlApplicationContext("classpath:spring.xml");
         Car carFactory = (Car) applicationContext.getBean("carFactory");
         System.out.println(carFactory);
+    }
+
+    @Test
+    public void aspectJTest() throws NoSuchMethodException {
+        // 创建一个切面表达式处理器
+        AspectJExpressionPointcut pointcut = new AspectJExpressionPointcut("execution(* com.wanfeng.myminispring.service.HelloService.*(..))");
+        Class<HelloService> clazz = HelloService.class;
+        Method method = clazz.getDeclaredMethod("sayHello");
+        // 判断切面表达式是否成立
+        System.out.println(pointcut.matches(clazz));
+        System.out.println(pointcut.matches(method, clazz));
     }
 }
 
