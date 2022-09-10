@@ -1,6 +1,6 @@
 package com.wanfeng.myminispring.Bean;
 
-import com.wanfeng.myminiSpring.beans.factory.FactoryBean;
+import com.wanfeng.myminispring.beans.factory.FactoryBean;
 import lombok.Data;
 
 @Data

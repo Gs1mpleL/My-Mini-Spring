@@ -1,7 +1,7 @@
 package com.wanfeng.myminispring.BeanProcessor;
 
-import com.wanfeng.myminiSpring.beans.BeansException;
-import com.wanfeng.myminiSpring.beans.factory.config.BeanPostProcessor;
+import com.wanfeng.myminispring.beans.BeansException;
+import com.wanfeng.myminispring.beans.factory.config.BeanPostProcessor;
 
 public class MyBeanPostProcessor implements BeanPostProcessor {
     @Override

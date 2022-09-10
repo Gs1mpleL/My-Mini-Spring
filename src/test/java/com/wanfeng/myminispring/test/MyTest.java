@@ -1,25 +1,25 @@
 package com.wanfeng.myminispring.test;
 
 import cn.hutool.core.io.IoUtil;
-import com.wanfeng.myminiSpring.aop.AdvisedSupport;
-import com.wanfeng.myminiSpring.aop.ClassFilter;
-import com.wanfeng.myminiSpring.aop.MethodMatcher;
-import com.wanfeng.myminiSpring.aop.TargetSource;
-import com.wanfeng.myminiSpring.aop.aspectJ.AspectJExpressionPointcut;
-import com.wanfeng.myminiSpring.aop.aspectJ.AspectJExpressionPointcutAdvisor;
-import com.wanfeng.myminiSpring.aop.framework.CglibAopProxy;
-import com.wanfeng.myminiSpring.aop.framework.JdkDynamicAopProxy;
-import com.wanfeng.myminiSpring.aop.framework.ProxyFactory;
-import com.wanfeng.myminiSpring.aop.framework.adapter.MethodBeforeAdviceInterceptor;
-import com.wanfeng.myminiSpring.beans.PropertyValue;
-import com.wanfeng.myminiSpring.beans.PropertyValues;
-import com.wanfeng.myminiSpring.beans.factory.config.BeanDefinition;
-import com.wanfeng.myminiSpring.beans.factory.config.BeanReference;
-import com.wanfeng.myminiSpring.beans.factory.support.DefaultListableBeanFactory;
-import com.wanfeng.myminiSpring.beans.factory.xml.XmlBeanDefinitionReader;
-import com.wanfeng.myminiSpring.context.support.ClassPathXmlApplicationContext;
-import com.wanfeng.myminiSpring.core.io.DefaultResourceLoader;
-import com.wanfeng.myminiSpring.core.io.Resource;
+import com.wanfeng.myminispring.aop.AdvisedSupport;
+import com.wanfeng.myminispring.aop.ClassFilter;
+import com.wanfeng.myminispring.aop.MethodMatcher;
+import com.wanfeng.myminispring.aop.TargetSource;
+import com.wanfeng.myminispring.aop.aspectJ.AspectJExpressionPointcut;
+import com.wanfeng.myminispring.aop.aspectJ.AspectJExpressionPointcutAdvisor;
+import com.wanfeng.myminispring.aop.framework.CglibAopProxy;
+import com.wanfeng.myminispring.aop.framework.JdkDynamicAopProxy;
+import com.wanfeng.myminispring.aop.framework.ProxyFactory;
+import com.wanfeng.myminispring.aop.framework.adapter.MethodBeforeAdviceInterceptor;
+import com.wanfeng.myminispring.beans.PropertyValue;
+import com.wanfeng.myminispring.beans.PropertyValues;
+import com.wanfeng.myminispring.beans.factory.config.BeanDefinition;
+import com.wanfeng.myminispring.beans.factory.config.BeanReference;
+import com.wanfeng.myminispring.beans.factory.support.DefaultListableBeanFactory;
+import com.wanfeng.myminispring.beans.factory.xml.XmlBeanDefinitionReader;
+import com.wanfeng.myminispring.context.support.ClassPathXmlApplicationContext;
+import com.wanfeng.myminispring.core.io.DefaultResourceLoader;
+import com.wanfeng.myminispring.core.io.Resource;
 import com.wanfeng.myminispring.Bean.Car;
 import com.wanfeng.myminispring.Bean.Person;
 import com.wanfeng.myminispring.BeanProcessor.MyBeanFactoryPostProcessor;
@@ -240,6 +240,12 @@ public class MyTest {
             IService proxy = (IService) new ProxyFactory(advisedSupport).getProxy();
             proxy.sayHello();
         }
+    }
+
+    @Test
+    public void testAutoProxy(){
+        ClassPathXmlApplicationContext applicationContext = new ClassPathXmlApplicationContext("classpath:spring.xml");
+        ((IService) applicationContext.getBean("helloService")).sayHello();
     }
 }
 

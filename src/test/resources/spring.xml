@@ -1,34 +1,26 @@
-<!--<?xml version="1.0" encoding="UTF-8"?>-->
-<!--<beans >-->
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+	         http://www.springframework.org/schema/beans/spring-beans.xsd
+		 http://www.springframework.org/schema/context
+		 http://www.springframework.org/schema/context/spring-context-4.0.xsd">
 
-<!--    <bean id="person" class="com.wanfeng.myminispring.Bean.Person">-->
-<!--        <property name="name" value="derek"/>-->
-<!--        <property name="age" value="12" />-->
-<!--        <property name="car" ref="car"/>-->
-<!--    </bean>-->
+    <bean id="helloService" class="com.wanfeng.myminispring.service.HelloService"/>
 
-<!--    <bean id="car" class="com.wanfeng.myminispring.Bean.Car">-->
-<!--        <property name="carName" value="maShaLa"/>-->
-<!--    </bean>-->
+    <bean class="com.wanfeng.myminispring.aop.framework.auto.DefaultAdvisorAutoProxyCreator"/>
 
-<!--    <bean class="com.wanfeng.myminispring.BeanProcessor.MyBeanFactoryPostProcessor"/>-->
-<!--    <bean class="com.wanfeng.myminispring.BeanProcessor.MyBeanPostProcessor"/>-->
-
-<!--</beans>-->
+    <bean id="pointcutAdvisor" class="com.wanfeng.myminispring.aop.aspectJ.AspectJExpressionPointcutAdvisor">
+        <property name="expression" value="execution(* com.wanfeng.myminispring.service.HelloService.*(..))"/>
+        <property name="advice" ref="methodInterceptor"/>
+    </bean>
 
 
-<!--        <?xml version="1.0" encoding="UTF-8"?>-->
-<beans>
+    <bean id="methodInterceptor" class="com.wanfeng.myminispring.aop.framework.adapter.MethodBeforeAdviceInterceptor">
+        <property name="advice" ref="beforeAdvice"/>
+    </bean>
 
-<bean id="person" class="com.wanfeng.myminispring.Bean.Person" >
-    <property name="name" value="derek"/>
-    <property name="car" ref="car"/>
-</bean>
+    <bean id="beforeAdvice" class="com.wanfeng.myminispring.service.HelloServiceBeforeAdvice"/>
 
-<bean id="car" class="com.wanfeng.myminispring.Bean.Car" scope="prototype">
-    <property name="carName" value="porsche" />
-</bean>
-<bean id="carFactory" class="com.wanfeng.myminispring.Bean.CarFactoryBean">
-    <property name="carName" value="porsche"/>
-</bean>
 </beans>

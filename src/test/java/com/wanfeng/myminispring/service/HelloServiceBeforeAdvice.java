@@ -1,6 +1,6 @@
 package com.wanfeng.myminispring.service;
 
-import com.wanfeng.myminiSpring.aop.MethodBeforeAdvice;
+import com.wanfeng.myminispring.aop.MethodBeforeAdvice;
 
 import java.lang.reflect.Method;
 
