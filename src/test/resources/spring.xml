@@ -1,27 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+	         http://www.springframework.org/schema/beans/spring-beans.xsd
+		 http://www.springframework.org/schema/context
+		 http://www.springframework.org/schema/context/spring-context-4.0.xsd">
 
-    <bean id="helloService" class="com.wanfeng.myminispring.service.HelloService"/>
+    <context:component-scan base-package="com.wanfeng.myminispring"/>
 
-    <bean class="com.wanfeng.myminispring.aop.framework.auto.DefaultAdvisorAutoProxyCreator"/>
-
-    <bean id="pointcutAdvisor" class="com.wanfeng.myminispring.aop.aspectJ.AspectJExpressionPointcutAdvisor">
-        <property name="expression" value="execution(* com.wanfeng.myminispring.service.HelloService.*(..))"/>
-        <property name="advice" ref="methodInterceptor"/>
-    </bean>
-
-
-    <bean id="methodInterceptor" class="com.wanfeng.myminispring.aop.framework.adapter.MethodBeforeAdviceInterceptor">
-        <property name="advice" ref="beforeAdvice"/>
-    </bean>
-
-    <bean id="beforeAdvice" class="com.wanfeng.myminispring.service.HelloServiceBeforeAdvice"/>
-
-    <bean id="car" class="com.wanfeng.myminispring.Bean.Car" >
-        <property name="carName" value="${carName}" />
-    </bean>
-
-    <bean class="com.wanfeng.myminispring.beans.factory.PropertyPlaceholderConfigurer">
-        <property name="location" value="classpath:car.properties" />
-    </bean>
 </beans>

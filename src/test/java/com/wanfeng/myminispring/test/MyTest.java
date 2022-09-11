@@ -254,5 +254,11 @@ public class MyTest {
         Car car = (Car) applicationContext.getBean("car");
         System.out.println(car);
     }
+
+    @Test
+    public void ComponentTest(){
+        ClassPathXmlApplicationContext applicationContext = new ClassPathXmlApplicationContext("classpath:spring.xml");
+        ((HelloService) applicationContext.getBean("service")).sayHello();
+    }
 }
 

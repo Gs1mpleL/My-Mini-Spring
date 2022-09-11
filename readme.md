@@ -94,3 +94,8 @@ Spring采用的整体架构为  接口->接口->抽象类->抽象类->抽象类-
 ## ${xxx}注入配置文件内容
 主要是在BeanDefinition注册完成后执行一个BeanFactoryPostProcessor
 逐个读取每个BeanDefinition的value，发现${xxx},就从配置文件中获取值，并替换
+
+## 设置包扫描
+解析XML时发现
+<context:component-scan base-package="com.wanfeng.myminispring"/>
+就会根据base-package去对应包下寻找@Component修饰的类，将其作为BeanDefinition注入的BeanFactory中
