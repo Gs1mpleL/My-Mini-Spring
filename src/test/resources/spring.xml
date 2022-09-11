@@ -17,4 +17,11 @@
 
     <bean id="beforeAdvice" class="com.wanfeng.myminispring.service.HelloServiceBeforeAdvice"/>
 
+    <bean id="car" class="com.wanfeng.myminispring.Bean.Car" >
+        <property name="carName" value="${carName}" />
+    </bean>
+
+    <bean class="com.wanfeng.myminispring.beans.factory.PropertyPlaceholderConfigurer">
+        <property name="location" value="classpath:car.properties" />
+    </bean>
 </beans>

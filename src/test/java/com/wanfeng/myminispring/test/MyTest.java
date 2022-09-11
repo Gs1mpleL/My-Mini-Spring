@@ -247,5 +247,12 @@ public class MyTest {
         ClassPathXmlApplicationContext applicationContext = new ClassPathXmlApplicationContext("classpath:spring.xml");
         ((IService) applicationContext.getBean("helloService")).sayHello();
     }
+
+    @Test
+    public void propTest(){
+        ClassPathXmlApplicationContext applicationContext = new ClassPathXmlApplicationContext("classpath:spring.xml");
+        Car car = (Car) applicationContext.getBean("car");
+        System.out.println(car);
+    }
 }
 
