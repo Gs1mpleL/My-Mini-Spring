@@ -12,17 +12,17 @@ import java.util.Map;
 public abstract class AbstractApplicationContext extends DefaultResourceLoader implements ConfigurableApplicationContext {
     @Override
     public void refresh() throws BeansException {
-        //创建BeanFactory，并加载BeanDefinition
+        //创建BeanFactory(直接new一个实现好的BeanFactory)，并加载BeanDefinition，目前实现的是从XML中加载BeanDefinition
         refreshBeanFactory();
+        // 获得new出来的那个BeanFactory
         ConfigurableListableBeanFactory beanFactory = getBeanFactory();
         //添加ApplicationContextAwareProcessor，让继承自ApplicationContextAware的bean能感知bean
         beanFactory.addBeanPostProcessor(new ApplicationContextAwareProcessor(this));
-        // 执行BeanFactoryPostProcessor
+        // 执行BeanFactoryPostProcessor，如果是BeanFactory，需要手动执行，使用ApplicationContext在这里就自动进行了
         invokeBeanFactoryPostProcessors(beanFactory);
         //BeanPostProcessor需要提前与其他bean实例化之前注册
         registerBeanPostProcessors(beanFactory);
-
-        //实例化单例bean
+        //遍历BeanDefinition，实例化所有单例bean
         beanFactory.preInstantiateSingletons();
     }
 
@@ -39,6 +39,7 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader i
     }
 
     protected void registerBeanPostProcessors(ConfigurableListableBeanFactory beanFactory) {
+        // 获取BeanDefinition已经注册的所有的BeanPostProcessors，把他们添加到BeanFactory的BeanPostProcessor缓存中
         Map<String, BeanPostProcessor> beanPostProcessorMap = beanFactory.getBeansOfType(BeanPostProcessor.class);
         for (BeanPostProcessor beanPostProcessor : beanPostProcessorMap.values()) {
             beanFactory.addBeanPostProcessor(beanPostProcessor);
