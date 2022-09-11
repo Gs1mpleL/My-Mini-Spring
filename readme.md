@@ -53,3 +53,15 @@ XML -> BeanDefinition -> BeanDefinition被BeanFactoryPostProcessor
 
 # AOP
 封装比较深，使用AspectJ切面表达式进行匹配，通过配置进行选择是JDK代理还是CGLIB代理
+
+# 到目前为止，Bean的生命周期
+XML
+BeanDefinition
+BeanFactory修改BeanDefinition
+InstantiationAwarePostProcessor，生成代理对象
+Bean的实例化
+对FactoryBean的处理
+BeanPostProcessor前置处理（如果实现Aware接口，执行对应方法）
+执行Bean的初始化方法（执行自定义的Init()方法）
+BeanPostProcessor后置处理
+Bean的使用
