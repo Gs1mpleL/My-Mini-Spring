@@ -99,3 +99,8 @@ Spring采用的整体架构为  接口->接口->抽象类->抽象类->抽象类-
 解析XML时发现
 <context:component-scan base-package="com.wanfeng.myminispring"/>
 就会根据base-package去对应包下寻找@Component修饰的类，将其作为BeanDefinition注入的BeanFactory中
+
+## @Value和@Autowire实现
+在Bean实例化后，在为一个Bean注入属性前，遍历它的Filed，如果发现有@Value或@Autowire注解
+就通过注册到BeanFactory的解析器解析Value，或根据类型寻找对应的要注入的Bean
+通过反射直接注入Bean的字段中，再继续执行属性注入

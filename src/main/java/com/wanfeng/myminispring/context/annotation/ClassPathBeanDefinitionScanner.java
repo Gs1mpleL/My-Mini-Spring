@@ -1,6 +1,7 @@
 package com.wanfeng.myminispring.context.annotation;
 
 import cn.hutool.core.util.StrUtil;
+import com.wanfeng.myminispring.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor;
 import com.wanfeng.myminispring.beans.factory.config.BeanDefinition;
 import com.wanfeng.myminispring.beans.factory.support.BeanDefinitionRegistry;
 import com.wanfeng.myminispring.stereotype.Component;
@@ -9,6 +10,8 @@ import java.util.Set;
 
 public class ClassPathBeanDefinitionScanner extends ClassPathScanningCandidateComponentProvider {
     private BeanDefinitionRegistry registry;
+
+    public static final String AUTOWIRED_ANNOTATION_PROCESSOR_BEAN_NAME = "com.wanfeng.myminispring.context.annotation.internalAutowiredAnnotationProcessor";
 
     public ClassPathBeanDefinitionScanner(BeanDefinitionRegistry registry) {
         this.registry = registry;
@@ -29,6 +32,8 @@ public class ClassPathBeanDefinitionScanner extends ClassPathScanningCandidateCo
                 registry.registerBeanDefinition(beanName, candidate);
             }
         }
+        // 处理完宝扫描后，再注册一个 处理@Autowired和@Value注解的BeanPostProcessor
+        registry.registerBeanDefinition(AUTOWIRED_ANNOTATION_PROCESSOR_BEAN_NAME, new BeanDefinition(AutowiredAnnotationBeanPostProcessor.class));
     }
 
     /**

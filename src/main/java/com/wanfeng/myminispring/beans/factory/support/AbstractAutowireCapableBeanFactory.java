@@ -5,6 +5,7 @@ import cn.hutool.core.util.ClassUtil;
 import cn.hutool.core.util.StrUtil;
 import com.wanfeng.myminispring.beans.BeansException;
 import com.wanfeng.myminispring.beans.PropertyValue;
+import com.wanfeng.myminispring.beans.PropertyValues;
 import com.wanfeng.myminispring.beans.factory.BeanFactoryAware;
 import com.wanfeng.myminispring.beans.factory.DisposableBean;
 import com.wanfeng.myminispring.beans.factory.InitializingBean;
@@ -55,6 +56,8 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
         try {
             // 创建Bean实例
             bean = createBeanInstance(beanDefinition);
+            //在设置bean属性之前，允许BeanPostProcessor修改属性值
+            applyBeanPostprocessorsBeforeApplyingPropertyValues(beanName, bean, beanDefinition);
             // 为Bean的成员赋值，即属性注入
             applyPropertyValues(beanName,bean,beanDefinition);
             // 执行Bean的构造方法，BeanPostProcessor的前置和后置处理方法
@@ -76,6 +79,19 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
         if (beanDefinition.isSingleton()) {
             if (bean instanceof DisposableBean || StrUtil.isNotEmpty(beanDefinition.getDestroyMethodName())) {
                 registerDisposableBean(beanName, new DisposableBeanAdapter(bean, beanName, beanDefinition));
+            }
+        }
+    }
+    protected void applyBeanPostprocessorsBeforeApplyingPropertyValues(String beanName, Object bean, BeanDefinition beanDefinition) {
+        for (BeanPostProcessor beanPostProcessor : getBeanPostProcessors()) {
+            if (beanPostProcessor instanceof InstantiationAwareBeanPostProcessor) {
+                // 通过@Value @Autowire 重新设置即将注入Bean的属性Value
+                PropertyValues pvs = ((InstantiationAwareBeanPostProcessor) beanPostProcessor).postProcessPropertyValues(beanDefinition.getPropertyValues(), bean, beanName);
+                if (pvs != null) {
+                    for (PropertyValue propertyValue : pvs.getPropertyValues()) {
+                        beanDefinition.getPropertyValues().addPropertyValue(propertyValue);
+                    }
+                }
             }
         }
     }

@@ -5,6 +5,8 @@ import com.wanfeng.myminispring.beans.factory.FactoryBean;
 import com.wanfeng.myminispring.beans.factory.config.BeanDefinition;
 import com.wanfeng.myminispring.beans.factory.config.BeanPostProcessor;
 import com.wanfeng.myminispring.beans.factory.config.ConfigurableBeanFactory;
+import com.wanfeng.myminispring.util.StringValueResolver;
+
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,12 +14,17 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 抽象Bean工厂，可以创建Bean，注册Bean定义
- * 模版模式，创建Bean和BeanDefinition的方法交给子类来实现
+ * @author derekyi
+ * @date 2020/11/22
  */
 public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry implements ConfigurableBeanFactory {
+
     private final List<BeanPostProcessor> beanPostProcessors = new ArrayList<>();
+
     private final Map<String, Object> factoryBeanObjectCache = new HashMap<>();
+
+    private final List<StringValueResolver> embeddedValueResolvers = new ArrayList<StringValueResolver>();
+
     @Override
     public Object getBean(String name) throws BeansException {
         Object sharedInstance = getSingleton(name);
@@ -30,9 +37,14 @@ public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry i
         Object bean = createBean(name, beanDefinition);
         return getObjectForBeanInstance(bean, name);
     }
-    protected abstract Object createBean(String beanName, BeanDefinition beanDefinition) throws BeansException;
-    protected abstract BeanDefinition getBeanDefinition(String beanName) throws BeansException;
 
+    /**
+     * 如果是FactoryBean，从FactoryBean#getObject中创建bean
+     *
+     * @param beanInstance
+     * @param beanName
+     * @return
+     */
     protected Object getObjectForBeanInstance(Object beanInstance, String beanName) {
         Object object = beanInstance;
         if (beanInstance instanceof FactoryBean) {
@@ -57,6 +69,14 @@ public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry i
         return object;
     }
 
+    @Override
+    public <T> T getBean(String name, Class<T> requiredType) throws BeansException {
+        return ((T) getBean(name));
+    }
+
+    protected abstract Object createBean(String beanName, BeanDefinition beanDefinition) throws BeansException;
+
+    protected abstract BeanDefinition getBeanDefinition(String beanName) throws BeansException;
 
     @Override
     public void addBeanPostProcessor(BeanPostProcessor beanPostProcessor) {
@@ -64,12 +84,23 @@ public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry i
         this.beanPostProcessors.remove(beanPostProcessor);
         this.beanPostProcessors.add(beanPostProcessor);
     }
+
     public List<BeanPostProcessor> getBeanPostProcessors() {
         return this.beanPostProcessors;
     }
 
-    @Override
-    public <T> T getBean(String name, Class<T> requiredType) throws BeansException {
-        return ((T) getBean(name));
+    public void addEmbeddedValueResolver(StringValueResolver valueResolver) {
+        this.embeddedValueResolvers.add(valueResolver);
+    }
+
+    /**
+     * 注册进来的解析器解析Value
+     */
+    public String resolveEmbeddedValue(String value) {
+        String result = value;
+        for (StringValueResolver resolver : this.embeddedValueResolvers) {
+            result = resolver.resolveStringValue(result);
+        }
+        return result;
     }
 }
