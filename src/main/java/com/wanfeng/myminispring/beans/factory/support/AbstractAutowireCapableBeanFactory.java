@@ -57,35 +57,31 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
             // 创建Bean实例
             bean = createBeanInstance(beanDefinition);
             //在设置bean属性之前，允许BeanPostProcessor修改属性值
-            applyBeanPostprocessorsBeforeApplyingPropertyValues(beanName, bean, beanDefinition);
-            // 为Bean的成员赋值，即属性注入
-            applyPropertyValues(beanName,bean,beanDefinition);
-            // 执行Bean的构造方法，BeanPostProcessor的前置和后置处理方法
-            initializeBean(beanName, bean, beanDefinition);
+            boolean continueWithPropertyPopulation = applyBeanPostProcessorsAfterInstantiation(beanName, bean);
+            if (!continueWithPropertyPopulation) {
+                return bean;
+            }
+            //在设置bean属性之前，允许BeanPostProcessor修改属性值
+            applyBeanPostProcessorsBeforeApplyingPropertyValues(beanName, bean, beanDefinition);
+            //为bean填充属性
+            applyPropertyValues(beanName, bean, beanDefinition);
+            //执行bean的初始化方法和BeanPostProcessor的前置和后置处理方法
+            bean = initializeBean(beanName, bean, beanDefinition);
         } catch (Exception e) {
             throw new BeansException("Instantiation of bean failed", e);
         }
+
         //注册有销毁方法的bean
         registerDisposableBeanIfNecessary(beanName, bean, beanDefinition);
 
-
-        // 只有单例Bean才注入Map，不是单例的Bean下次获取发现Map中不存在就会重新创建
         if (beanDefinition.isSingleton()) {
             addSingleton(beanName, bean);
         }
         return bean;
     }
-    protected void registerDisposableBeanIfNecessary(String beanName, Object bean, BeanDefinition beanDefinition) {
-        if (beanDefinition.isSingleton()) {
-            if (bean instanceof DisposableBean || StrUtil.isNotEmpty(beanDefinition.getDestroyMethodName())) {
-                registerDisposableBean(beanName, new DisposableBeanAdapter(bean, beanName, beanDefinition));
-            }
-        }
-    }
-    protected void applyBeanPostprocessorsBeforeApplyingPropertyValues(String beanName, Object bean, BeanDefinition beanDefinition) {
+    protected void applyBeanPostProcessorsBeforeApplyingPropertyValues(String beanName, Object bean, BeanDefinition beanDefinition) {
         for (BeanPostProcessor beanPostProcessor : getBeanPostProcessors()) {
             if (beanPostProcessor instanceof InstantiationAwareBeanPostProcessor) {
-                // 通过@Value @Autowire 重新设置即将注入Bean的属性Value
                 PropertyValues pvs = ((InstantiationAwareBeanPostProcessor) beanPostProcessor).postProcessPropertyValues(beanDefinition.getPropertyValues(), bean, beanName);
                 if (pvs != null) {
                     for (PropertyValue propertyValue : pvs.getPropertyValues()) {
@@ -94,6 +90,26 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
                 }
             }
         }
+    }
+
+    protected void registerDisposableBeanIfNecessary(String beanName, Object bean, BeanDefinition beanDefinition) {
+        if (beanDefinition.isSingleton()) {
+            if (bean instanceof DisposableBean || StrUtil.isNotEmpty(beanDefinition.getDestroyMethodName())) {
+                registerDisposableBean(beanName, new DisposableBeanAdapter(bean, beanName, beanDefinition));
+            }
+        }
+    }
+    private boolean applyBeanPostProcessorsAfterInstantiation(String beanName, Object bean) {
+        boolean continueWithPropertyPopulation = true;
+        for (BeanPostProcessor beanPostProcessor : getBeanPostProcessors()) {
+            if (beanPostProcessor instanceof InstantiationAwareBeanPostProcessor) {
+                if (!((InstantiationAwareBeanPostProcessor) beanPostProcessor).postProcessAfterInstantiation(bean, beanName)) {
+                    continueWithPropertyPopulation = false;
+                    break;
+                }
+            }
+        }
+        return continueWithPropertyPopulation;
     }
 
     protected void applyPropertyValues(String beanName, Object bean, BeanDefinition beanDefinition) {
