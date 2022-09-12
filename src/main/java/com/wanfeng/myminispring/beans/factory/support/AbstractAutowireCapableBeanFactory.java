@@ -3,6 +3,7 @@ package com.wanfeng.myminispring.beans.factory.support;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.ClassUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.core.util.TypeUtil;
 import com.wanfeng.myminispring.beans.BeansException;
 import com.wanfeng.myminispring.beans.PropertyValue;
 import com.wanfeng.myminispring.beans.PropertyValues;
@@ -10,6 +11,7 @@ import com.wanfeng.myminispring.beans.factory.BeanFactoryAware;
 import com.wanfeng.myminispring.beans.factory.DisposableBean;
 import com.wanfeng.myminispring.beans.factory.InitializingBean;
 import com.wanfeng.myminispring.beans.factory.config.*;
+import com.wanfeng.myminispring.core.conver.ConversionService;
 
 import java.lang.reflect.Method;
 
@@ -121,6 +123,16 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
                 if (value instanceof BeanReference){
                     BeanReference beanReference = (BeanReference) value;
                     value = getBean(beanReference.getBeanName());
+                }else {
+                    //类型转换
+                    Class<?> sourceType = value.getClass();
+                    Class<?> targetType = (Class<?>) TypeUtil.getFieldType(bean.getClass(), name);
+                    ConversionService conversionService = getConversionService();
+                    if (conversionService != null) {
+                        if (conversionService.canConvert(sourceType, targetType)) {
+                            value = conversionService.convert(value, targetType);
+                        }
+                    }
                 }
                 //通过反射设置Bean的参数
                 BeanUtil.setFieldValue(bean, name, value);

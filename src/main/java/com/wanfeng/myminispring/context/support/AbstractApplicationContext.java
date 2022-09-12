@@ -5,11 +5,13 @@ import com.wanfeng.myminispring.beans.factory.ConfigurableListableBeanFactory;
 import com.wanfeng.myminispring.beans.factory.config.BeanFactoryPostProcessor;
 import com.wanfeng.myminispring.beans.factory.config.BeanPostProcessor;
 import com.wanfeng.myminispring.context.ConfigurableApplicationContext;
+import com.wanfeng.myminispring.core.conver.ConversionService;
 import com.wanfeng.myminispring.core.io.DefaultResourceLoader;
 
 import java.util.Map;
 
 public abstract class AbstractApplicationContext extends DefaultResourceLoader implements ConfigurableApplicationContext {
+    public static final String CONVERSION_SERVICE_BEAN_NAME = "conversionService";
     @Override
     public void refresh() throws BeansException {
         //创建BeanFactory(直接new一个实现好的BeanFactory)，并加载BeanDefinition，目前实现的是从XML中加载BeanDefinition
@@ -23,11 +25,24 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader i
         //BeanPostProcessor需要提前与其他bean实例化之前注册
         registerBeanPostProcessors(beanFactory);
         //遍历BeanDefinition，实例化所有单例bean
+        finishBeanFactoryInitialization(beanFactory);
+    }
+
+    protected void finishBeanFactoryInitialization(ConfigurableListableBeanFactory beanFactory) {
+        //设置类型转换器
+        if (beanFactory.containsBean(CONVERSION_SERVICE_BEAN_NAME)) {
+            Object conversionService = beanFactory.getBean(CONVERSION_SERVICE_BEAN_NAME);
+            if (conversionService instanceof ConversionService) {
+                beanFactory.setConversionService((ConversionService) conversionService);
+            }
+        }
+
+        //提前实例化单例bean
         beanFactory.preInstantiateSingletons();
     }
 
-
     protected abstract void refreshBeanFactory() throws BeansException;
+
     public abstract ConfigurableListableBeanFactory getBeanFactory();
 
     protected void invokeBeanFactoryPostProcessors(ConfigurableListableBeanFactory beanFactory) {
@@ -45,10 +60,12 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader i
             beanFactory.addBeanPostProcessor(beanPostProcessor);
         }
     }
+
     @Override
     public <T> T getBean(String name, Class<T> requiredType) throws BeansException {
         return getBeanFactory().getBean(name, requiredType);
     }
+
     @Override
     public <T> Map<String, T> getBeansOfType(Class<T> type) throws BeansException {
         return getBeanFactory().getBeansOfType(type);
@@ -82,5 +99,10 @@ public abstract class AbstractApplicationContext extends DefaultResourceLoader i
 
     public <T> T getBean(Class<T> requiredType) throws BeansException {
         return getBeanFactory().getBean(requiredType);
+    }
+
+    @Override
+    public boolean containsBean(String name) {
+        return getBeanFactory().containsBean(name);
     }
 }

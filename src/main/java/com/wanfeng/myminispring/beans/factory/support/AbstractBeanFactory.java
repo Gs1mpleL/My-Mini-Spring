@@ -5,6 +5,7 @@ import com.wanfeng.myminispring.beans.factory.FactoryBean;
 import com.wanfeng.myminispring.beans.factory.config.BeanDefinition;
 import com.wanfeng.myminispring.beans.factory.config.BeanPostProcessor;
 import com.wanfeng.myminispring.beans.factory.config.ConfigurableBeanFactory;
+import com.wanfeng.myminispring.core.conver.ConversionService;
 import com.wanfeng.myminispring.util.StringValueResolver;
 
 
@@ -24,6 +25,8 @@ public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry i
     private final Map<String, Object> factoryBeanObjectCache = new HashMap<>();
 
     private final List<StringValueResolver> embeddedValueResolvers = new ArrayList<StringValueResolver>();
+
+    private ConversionService conversionService;
 
     @Override
     public Object getBean(String name) throws BeansException {
@@ -102,5 +105,15 @@ public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry i
             result = resolver.resolveStringValue(result);
         }
         return result;
+    }
+
+    @Override
+    public void setConversionService(ConversionService conversionService) {
+        this.conversionService = conversionService;
+    }
+
+    @Override
+    public ConversionService getConversionService() {
+        return conversionService;
     }
 }

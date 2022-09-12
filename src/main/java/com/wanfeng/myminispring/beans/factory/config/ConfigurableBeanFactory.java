@@ -1,6 +1,7 @@
 package com.wanfeng.myminispring.beans.factory.config;
 
 import com.wanfeng.myminispring.beans.factory.HierarchicalBeanFactory;
+import com.wanfeng.myminispring.core.conver.ConversionService;
 import com.wanfeng.myminispring.util.StringValueResolver;
 
 public interface ConfigurableBeanFactory extends HierarchicalBeanFactory,SingletonBeanRegistry {
@@ -13,4 +14,7 @@ public interface ConfigurableBeanFactory extends HierarchicalBeanFactory,Singlet
     void addEmbeddedValueResolver(StringValueResolver valueResolver);
 
     String resolveEmbeddedValue(String value);
+
+    void setConversionService(ConversionService conversionService);
+    ConversionService getConversionService();
 }
