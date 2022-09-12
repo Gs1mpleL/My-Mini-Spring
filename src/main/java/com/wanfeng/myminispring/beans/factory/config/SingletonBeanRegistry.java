@@ -8,4 +8,5 @@ public interface SingletonBeanRegistry {
      * 获取单例Bean
      */
     Object getSingleton(String beanName);
+    void addSingleton(String beanName, Object singletonObject);
 }

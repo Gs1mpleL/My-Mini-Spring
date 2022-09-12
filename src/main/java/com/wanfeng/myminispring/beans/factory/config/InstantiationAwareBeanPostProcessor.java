@@ -19,4 +19,9 @@ public interface InstantiationAwareBeanPostProcessor extends BeanPostProcessor{
             throws BeansException;
 
     public boolean postProcessAfterInstantiation(Object bean, String beanName) throws BeansException;
+
+    default Object getEarlyBeanReference(Object bean, String beanName) throws BeansException {
+        return bean;
+    }
+
 }

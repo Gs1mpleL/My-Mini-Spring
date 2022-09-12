@@ -11,4 +11,9 @@
     <bean class="com.wanfeng.myminispring.beans.factory.PropertyPlaceholderConfigurer">
         <property name="location" value="classpath:car.properties" />
     </bean>
+
+
+
+
+
 </beans>
